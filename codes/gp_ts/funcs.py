@@ -28,8 +28,11 @@ def f_1d_forrester(x):
 ### 2d functions
 bounds_2d = ((0, 1), (0, 1)) # set x range and y range
 
-def f_true_2d(x, y):
+def f_2d_single(x, y):
     return -np.sin(3 * x) * np.sin(3 * y)
+
+def f_2d_double(x, y):
+    return -1.25 * np.sin(6 * x) * np.sin(6 * y)
 
 
 ### Additive functions

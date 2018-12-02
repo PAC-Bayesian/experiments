@@ -72,7 +72,8 @@ kw_plot_box = {'save': True,
 kw_plot_samples = {'labels': [['joint_1', 'Bochner_grid'],
                               ['joint_1', 'Bochner_opt'], 
                               ['joint_1', 'SGD_EI'], 
-                              ['joint_1', 'SGD_LCB']], 
+                              ['joint_1', 'SGD_LCB'],
+                              ['joint_1', 'random_EI']], 
                    'save': True, 
                    'bins': 20
                    }

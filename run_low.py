@@ -3,12 +3,12 @@ import argparse
 
 import codes.gp_ts
 import codes.plotting
-from codes.plotting import FIG_SIZE, FIG_SIZE_SUB2
+from codes.plotting import FIG_SIZE_1D, FIG_SIZE_1D_EXT, FIG_SIZE_2D, FIG_SIZE_2D_SUB2
 
 from codes.gp_ts.prepare import Prior
 from codes.gp_ts.utils import *
 from codes.gp_ts.funcs import * 
-from codes.plotting.prior_plots import PriorPlots 
+from codes.plotting.prior_plot import PriorPlot 
 from codes.gp_ts.ts_grid import TSGridJoint
 from codes.gp_ts.ts_SGD import TSSGD
 from codes.gp_ts.ts_bochner import TSBochnerGrid, TSBochnerOpt 
@@ -46,8 +46,8 @@ make_dirs(path_to)
 def gen_prior(**kw):
     seed = kw.get('seed', 1111)
     input_dim = kw.get('input_dim', 1)
-    f_true = eval(kw.get('f_true', 'f_1d_forrester'))
-    bounds = kw.get('bounds', bounds_1d)
+    f_true = eval(kw.get('f_true', 'f_1d_forrester' if input_dim == 1 else 'f_2d_single'))
+    bounds = kw.get('bounds', bounds_1d if input_dim == 1 else bounds_2d)
     noise_std = kw.get('noise_std', 0.05)
     N_init = kw.get('N_init', 8)
     grid_size = kw.get('grid_size', (50,))
@@ -67,12 +67,13 @@ def plot_prior(prior, **kw):
     save = kw.get('save', False)
     title = kw.get('title', None)
     
-    plots = PriorPlots(prior, save=save, path=path_figs, figsize=FIG_SIZE)
+    figsize=FIG_SIZE_1D if prior.input_dim == 1 else FIG_SIZE_2D
+    plots = PriorPlot(prior, save=save, path=path_figs, figsize=figsize)
     plots.plot_f_true(title=title)
     plots.plot_model(title=title)
     if prior.input_dim == 2:
-        plots.plot_contour_2d(figsize=FIG_SIZE_SUB2, latent=True)
-        plots.plot_contour_2d(figsize=FIG_SIZE_SUB2, latent=False, scatter=True)
+        plots.plot_contour_2d(figsize=FIG_SIZE_2D_SUB2, latent=True, scatter=False)
+        plots.plot_contour_2d(figsize=FIG_SIZE_2D_SUB2, latent=False, scatter=True)
 
 def gen_samplers(prior, **kw):
     samplers = {}
@@ -105,6 +106,7 @@ def main():
     samplers['Bochner_opt'].show_GP_sample(ind=[1], save=True, path_to=path_to)
     samplers['Bochner_opt'].show_GP_sample(ind=[10], save=True, path_to=path_to)
     samplers['Bochner_opt'].show_GP_sample(ind=[11], save=True, path_to=path_to)
+    
 
 if __name__ == "__main__":
     main() 

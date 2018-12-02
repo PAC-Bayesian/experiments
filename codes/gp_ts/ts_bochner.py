@@ -8,6 +8,7 @@ from GPyOpt.optimization.optimizer import OptLbfgs
 import time
 from .prepare import Prior, Post, AdditivePrior, AdditivePost
 from .ts_grid import TSGrid, TSGridJoint
+from ..plotting.plot_helpers import contour_helper
 
 class ThompsonSamplerRBF():
     """Spectral sampling from GP with RBF kernel."""
@@ -98,14 +99,33 @@ class TSBochnerGrid(TSGridJoint):
         
     def show_GP_sample(self, ind=[0], save=False, **kw):
         sample_f = self.sampler.evauate_sample_posterior(self.x_grid, ind)
-        fig = GPy.plotting.plotting_library().figure()
-        self.sampler.model.plot_f(figure=fig, plot_limits=self.bounds[0])
-        # self.sampler.model.plot_data(figure=fig)
-        plt.plot(self.x_grid, sample_f, 'r-', label = 'GP sample_f')
-        plt.axvline(x=self.x_argmin[ind[0], :], label='Optimum', color='orange')
-        plt.legend()
+        if self.input_dim == 1:
+            fig = GPy.plotting.plotting_library().figure()
+            self.sampler.model.plot_f(figure=fig, plot_limits=self.bounds[0])
+            plt.plot(self.x_grid, sample_f, 'r-', label = 'GP sample_f')
+            plt.axvline(x=self.x_argmin[ind[0], :], label='Optimum', color='orange')
+            plt.legend()
+        elif self.input_dim == 2:
+            grid_shape = kw.get('grid_shape', (int(self.num_grids ** 0.5), ) * 2)
+            x_grid_1 = self.x_grid.take([0], 1).reshape(grid_shape)
+            x_grid_2 = self.x_grid.take([1], 1).reshape(grid_shape)
+            value_grid = sample_f.reshape(grid_shape)
+            plot_limits = tuple(zip(*self.bounds))
+            vmin, vmax, levels = contour_helper(self.model_init, plot_limits=plot_limits)
+            plt.clf()
+            plt.close()
+            fig = plt.figure()
+            ax = fig.add_subplot(111)
+            cf = ax.contourf(x_grid_1, x_grid_2, value_grid, vmin=vmin, vmax=vmax, levels=levels, extend='both')
+            plt.clabel(plt.contour(x_grid_1, x_grid_2, value_grid, vmin=vmin, vmax=vmax, levels=levels),
+            colors="black", extend='both')
+            plt.colorbar(cf) 
+            x_opt = self.x_argmin.take(ind, 0)
+            ax.scatter(x_opt[:, 0], x_opt[:, 1], color='orange', marker='x')
         if save:
             plt.savefig(kw.get('path_to') + 'Bochner_path' + '_{}'.format(ind[0]) + '.pdf')
+        plt.clf()
+        plt.close()
 
     def __repr__(self):
         return 'TS: {} with {} samples'.format(self.name, self.num_samples) + \
