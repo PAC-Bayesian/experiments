@@ -117,8 +117,8 @@ class TSBochnerGrid(TSGridJoint):
             fig = plt.figure()
             ax = fig.add_subplot(111)
             cf = ax.contourf(x_grid_1, x_grid_2, value_grid, vmin=vmin, vmax=vmax, levels=levels, extend='both')
-            plt.clabel(plt.contour(x_grid_1, x_grid_2, value_grid, vmin=vmin, vmax=vmax, levels=levels),
-            colors="black", extend='both')
+            plt.clabel(plt.contour(x_grid_1, x_grid_2, value_grid, vmin=vmin, vmax=vmax, levels=levels, extend='both'),
+            colors="black")
             plt.colorbar(cf) 
             x_opt = self.x_argmin.take(ind, 0)
             ax.scatter(x_opt[:, 0], x_opt[:, 1], color='orange', marker='x')
