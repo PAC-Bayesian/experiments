@@ -43,8 +43,8 @@ kw_samplers = {'samplers': {'joint_1': 'TSGridJoint',
                                     },
                         'joint_1': {}, 
                         'joint_2': {}, 
-                        'Bochner_grid': {'num_features': 5000},
-                        'Bochner_opt': {'num_features': 5000,
+                        'Bochner_grid': {'num_features': 10000},
+                        'Bochner_opt': {'num_features': 10000,
                                         'num_restarts': 10}
                        }
               }

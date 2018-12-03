@@ -2,7 +2,6 @@
 
 exp=~/experiments
 source activate dev-env
-conda install seaborn
  
 # Run the program
 python $exp/params/params_2d/params_0.py
