@@ -8,7 +8,7 @@ from GPyOpt.optimization.optimizer import OptLbfgs
 import time
 from .prepare import Prior, Post, AdditivePrior, AdditivePost
 from .ts_grid import TSGrid, TSGridJoint
-from ..plotting.plot_helpers import contour_helper
+from ..plotting.prior_plot import contour_helper
 
 class ThompsonSamplerRBF():
     """Spectral sampling from GP with RBF kernel."""
