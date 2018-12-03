@@ -106,6 +106,10 @@ def main():
     samplers['Bochner_opt'].show_GP_sample(ind=[1], save=True, path_to=path_to)
     samplers['Bochner_opt'].show_GP_sample(ind=[10], save=True, path_to=path_to)
     samplers['Bochner_opt'].show_GP_sample(ind=[11], save=True, path_to=path_to)
+    samplers['Bochner_grid'].show_GP_sample(ind=[100], save=True, path_to=path_to)
+    samplers['Bochner_grid'].show_GP_sample(ind=[101], save=True, path_to=path_to)
+    samplers['Bochner_grid'].show_GP_sample(ind=[110], save=True, path_to=path_to)
+    samplers['Bochner_grid'].show_GP_sample(ind=[111], save=True, path_to=path_to)
     
 
 if __name__ == "__main__":
