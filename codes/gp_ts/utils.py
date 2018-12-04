@@ -5,7 +5,7 @@ import pickle
 import builtins
 import os
 import GPy
-
+import gc
 
 ### helpers
 def make_dirs(path):
@@ -82,6 +82,7 @@ def draw_and_save(samplers, target='f', cond=False, verbose=True, \
         file_to_save = open(path + '{0}_{1}'.format(target, n), 'wb')
         pickle.dump({'value_min':value_min, 'x_argmin':x_argmin, 'meta_data': meta_data}, file_to_save)
         file_to_save.close()
+        gc.collect()
 
 def load_and_pack(num, target='f', path='./data/'):
     """Load samples and pack them for comparison.

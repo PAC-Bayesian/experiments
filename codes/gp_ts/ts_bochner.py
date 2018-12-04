@@ -9,6 +9,8 @@ import time
 from .prepare import Prior, Post, AdditivePrior, AdditivePost
 from .ts_grid import TSGrid, TSGridJoint
 from ..plotting.prior_plot import contour_helper
+import gc
+
 
 class ThompsonSamplerRBF():
     """Spectral sampling from GP with RBF kernel."""
@@ -70,7 +72,8 @@ class ThompsonSamplerRBF():
         mean = np.dot(np.dot(A_inv,design_matrix.T),self.Ysamples)
         Sigma = self.noise * A_inv
         self.samples_coefficients_posterior = np.random.multivariate_normal(mean.flatten(),Sigma,num_samples).T
-        
+        gc.collect()
+
     def evauate_sample_posterior(self,X,index):
         """
         Evaluate the continuous samples of the posterior.
@@ -96,7 +99,8 @@ class TSBochnerGrid(TSGridJoint):
         
         self.sampler.generate_samples_coefficients_posterior(self.num_samples)
         self.value_samples = self.sampler.evauate_sample_posterior(self.x_grid, range(self.num_samples)).T
-        
+        gc.collect()
+
     def show_GP_sample(self, ind=[0], save=False, **kw):
         sample_f = self.sampler.evauate_sample_posterior(self.x_grid, ind)
         if self.input_dim == 1:
@@ -167,6 +171,7 @@ class TSBochnerOpt(TSBochnerGrid):
             
             if verbose:
                 self._show_duration(start_time, n)
+        gc.collect()
 
     def _show_duration(self, start_time, n):
         """Display the drawing process."""
