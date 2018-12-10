@@ -63,6 +63,6 @@ kws = {'kw_prior_1': kw_prior_1,
        'kw_add_post': kw_add_post    
        }
 
-file_to_save = open(path_to_save + 'params_add_20_EI', 'wb')
+file_to_save = open(path_to_save + 'params_add_15_EI', 'wb')
 pickle.dump(kws, file_to_save)
 file_to_save.close()
