@@ -25,18 +25,19 @@ kw_prior_2 = {'f_true': 'f_1d_double',
             'seed': 111
             }
 
-kw_prior_plot = {'path_figs': './figs/fig_add_20/',
+kw_prior_plot = {'path_figs': './figs/fig_add_15/',
                  'save': True, 
                  'title': None
                 }
 
 kw_list = ([kw_prior_1] * 2  + [kw_prior_2]) * 5
-
-kw_add_post={'kw_list':kw_list, 
-             'num_comps': 20, 
-             'noise_var': 1e-9 * 20}
-
 d_factor = len(kw_list)
+
+kw_add_post={'kw_list': kw_list, 
+             'num_comps': d_factor, 
+             'noise_var': 1e-9 * d_factor}
+
+
 
 kw_samplers = {'samplers': {'SGD_EI': 'TSSGD'},
                'args': {'SGD_EI': {'num_anim': 5,
@@ -50,9 +51,9 @@ kw_samplers = {'samplers': {'SGD_EI': 'TSSGD'},
                                 }
               }
 
-kw_run = {'path_data': './data/data_add_20/',
+kw_run = {'path_data': './data/data_add_15/',
           'save_meta': True, 
-          'path_models': './models/model_space_add_20/',
+          'path_models': './models/model_space_add_15/',
           'save_model': False }
 
 kws = {'kw_prior_1': kw_prior_1, 
