@@ -48,7 +48,7 @@ class TSSGD(TSGridSeq):
         num_anim = kw.get('num_anim', 3)
         super(TSSGD, self).__init__(prior=prior, num_samples=num_samples, name=name, target=target, order=order, num_anim=num_anim)
         
-        self.iter_max = kw.get('iter_max', 100 * int(math.sqrt(self.input_dim)))
+        self.iter_max = kw.get('iter_max', 100)
         # self.input_dim = prior.input_dim
         self.bounds = np.array(prior.bounds)
         self.tol = kw.get('tol', 0.05)
