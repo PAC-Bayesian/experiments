@@ -6,6 +6,8 @@ import builtins
 import os
 import GPy
 import gc
+import re
+
 
 ### helpers
 def make_dirs(path):
@@ -17,6 +19,12 @@ def make_dirs(path):
 def get_summary_stats(data):
     summary_funcs = {'avg': np.mean, 'median': np.median, 'std': np.std}
     return {k: v(data) for k, v in summary_funcs.items()}
+
+def print_model(model, path='./', file_name='fitted_GP_prior'):
+    ansi_escape = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
+    with open(path + file_name, 'wt') as f:
+        f.write(ansi_escape.sub('', model.__str__()))
+    f.close()
 
 
 ### Grids transformation
@@ -55,7 +63,8 @@ def offset_woodbury(model_seq, num_data_init):
 def draw_and_save(samplers, target='f', cond=False, verbose=True, \
     num_sims=1, path='./data/', save_meta=True, **kw):
     """Save value_min and x_argmin of each sampler."""
-    
+    seed = kw.get('seed', 111)
+
     value_min = dict()
     x_argmin = dict()
     meta_data = dict()
@@ -69,9 +78,9 @@ def draw_and_save(samplers, target='f', cond=False, verbose=True, \
                 meta_data['{0}'.format(s.name)] = {k:v for k, v in s.__dict__.items() \
                 if type(v).__name__ in dir(builtins) and 'info' not in k and 'space' not in k}
             if 'TSSGD' in str(type(s)):            
-                s.draw_samples(verbose=verbose, random_exp=random_exp)
+                s.draw_samples(verbose=verbose, random_exp=random_exp, seed=seed)
             else:
-                s.draw_samples()
+                s.draw_samples(seed=seed)
             
             s.summarize_samples()
             value_min['{0}'.format(s.name)] = s.value_min

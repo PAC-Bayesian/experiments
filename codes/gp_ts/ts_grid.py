@@ -28,7 +28,7 @@ class TSGrid(object):
         self.ind_new = prior.model.X.shape[0] if self.is_post else 0
         self.model_init = prior.model
         self.input_dim = prior.input_dim
-        if self.input_dim < 4: 
+        if self.input_dim < 3: 
             self.x_grid = transform_grid_X(prior.x_grid)
             if self.is_post:
                 self.x_grid = np.vstack([prior.model.X, self.x_grid])

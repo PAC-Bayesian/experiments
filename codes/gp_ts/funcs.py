@@ -22,7 +22,19 @@ def f_1d_triple(x):
     return -np.sin(18 * x) 
 
 def f_1d_forrester(x):
-    return (6 * x - 2) ** 2 * np.sin(12 * x - 4) / 15
+    return (6 * x - 2)**2 * np.sin(12 * x - 4) / 15
+
+def f_1d_poly_4(x):
+    return 64 * x * (x - 1/4) * (x - 3/4) * (x - 1) 
+
+def f_1d_poly_2(x):
+    return 8 * (x - 0.5)**2 - 1
+
+def f_1d_linear(x):
+    return 2 * x - 1
+
+def f_1d_abs(x):
+    return 4 * np.abs(x - 0.5) - 1
 
 
 ### 2d functions

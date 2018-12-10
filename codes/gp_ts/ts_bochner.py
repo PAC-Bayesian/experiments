@@ -10,7 +10,7 @@ from .prepare import Prior, Post, AdditivePrior, AdditivePost
 from .ts_grid import TSGrid, TSGridJoint
 from ..plotting.prior_plot import contour_helper
 import gc
-
+gc.enable()
 
 class ThompsonSamplerRBF():
     """Spectral sampling from GP with RBF kernel."""

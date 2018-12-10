@@ -4,8 +4,8 @@ from GPy.plotting.gpy_plot.plot_util import helper_predict_with_model, helper_fo
 get_which_data_ycols, get_x_y_var
 import matplotlib.pyplot as plt
 plt.switch_backend('agg')
-from ..gp_ts.prepare import Prior, AdditivePrior
-
+from ..gp_ts.prepare import Prior, AdditivePrior, Post, AdditivePost
+from ..gp_ts.utils import print_model
 
 class PriorPlot(object):
     def __init__(self, prior, figsize=None, save=False, path='./'):
@@ -72,6 +72,7 @@ class PriorPlot(object):
                 plt.title(title + "(latent)")
             if self.save:
                 plt.savefig(self.path + "latent_" + file_name + ext)
+        print_model(model=self.prior.model, path=self.path, file_name=file_name + '.txt')
         plt.clf()
         plt.close()
 

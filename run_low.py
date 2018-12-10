@@ -14,6 +14,7 @@ from codes.gp_ts.ts_SGD import TSSGD
 from codes.gp_ts.ts_bochner import TSBochnerGrid, TSBochnerOpt 
 
 
+
 ## parser arguments
 parser = argparse.ArgumentParser(description='Input number of samples and number of .')
 parser.add_argument("path_to_params", type=str, help='path to the parameters file')
@@ -58,7 +59,7 @@ def gen_prior(**kw):
     prior.gen_data_init(N_init=N_init,ref=ref) 
     prior.gen_grid(grid_size=grid_size)
     prior.fit_GP_model()
-    
+
     return prior
 
 def plot_prior(prior, **kw):
@@ -66,7 +67,8 @@ def plot_prior(prior, **kw):
     make_dirs(path_figs)
     save = kw.get('save', False)
     title = kw.get('title', None)
-    
+    print_model(prior.model, path=path_figs)
+
     figsize=FIG_SIZE_1D if prior.input_dim == 1 else FIG_SIZE_2D
     plots = PriorPlot(prior, save=save, path=path_figs, figsize=figsize)
     plots.plot_f_true(title=title)

@@ -68,15 +68,17 @@ class SamplesPlot(object):
                 plt.savefig(self.path_to + file_name + '-' + title_words + ext)
             plt.clf()
             plt.close()
-
-            contrast_KDE_1d(x_argmin_data, label=label, figsize=figsize, bounds=bounds[d], xlabel=xlabel)
-            plt.tight_layout()
-            if set_title:
-                plt.gca().set_title(title_words + ' KDE')
-            if self.save:
-                plt.savefig(self.path_to + 'KDE-' + file_name + '-' + title_words + ext)
-            plt.clf()
-            plt.close()
+            try:
+                contrast_KDE_1d(x_argmin_data, label=label, figsize=figsize, bounds=bounds[d], xlabel=xlabel)
+                plt.tight_layout()
+                if set_title:
+                    plt.gca().set_title(title_words + ' KDE')
+                if self.save:
+                    plt.savefig(self.path_to + 'KDE-' + file_name + '-' + title_words + ext)
+                plt.clf()
+                plt.close()
+            except:
+                pass
         
         value_min_data = np.hstack([self.samples_value_min[0], self.samples_value_min[1]])
         xlabel = 'f'
@@ -89,15 +91,17 @@ class SamplesPlot(object):
             plt.savefig(self.path_to + file_name + '-' + title_words + ext)
         plt.clf()
         plt.close()
-
-        contrast_KDE_1d(value_min_data, label=label, figsize=figsize, xlabel=xlabel)
-        if set_title:
-            plt.gca().set_title(title_words + ' KDE')
-        plt.tight_layout()   
-        if self.save:
-            plt.savefig(self.path_to + 'KDE-' + file_name + '-' + title_words + ext)
-        plt.clf()
-        plt.close()
+        try: 
+            contrast_KDE_1d(value_min_data, label=label, figsize=figsize, xlabel=xlabel)
+            if set_title:
+                plt.gca().set_title(title_words + ' KDE')
+            plt.tight_layout()   
+            if self.save:
+                plt.savefig(self.path_to + 'KDE-' + file_name + '-' + title_words + ext)
+            plt.clf()
+            plt.close()
+        except:
+            pass
         
     # def contrast_hist(self, bins=20, file_name='1d-hist-', ext='.pdf', label=None, **kw):
     #     """Plot 1d-hist densities of argmin and minimum of two samplers for contrast."""
@@ -174,7 +178,6 @@ class SamplesPlot(object):
         """Plot 2d-hist densities of argmin of two samplers for contrast."""
         set_title = kw.get("set_title", False)
         figsize = kw.get('figsize', self.figsize)
-        KDE = kw.get('KDE', True)
 
         if not label:
             label = self.label
@@ -200,7 +203,7 @@ class SamplesPlot(object):
                 plt.savefig(self.path_to + file_name + '-' + title_words + ext)
             plt.clf()
             plt.close()
-            if KDE: 
+            try: 
                 contrast_KDE_2d(data, label=label, figsize=figsize, bounds=bounds,
                 xlabel=xlabel, ylabel=ylabel)
                 if set_title:
@@ -210,6 +213,8 @@ class SamplesPlot(object):
                     plt.savefig(self.path_to + 'KDE-' + file_name + '-' + title_words + ext)
                 plt.clf()
                 plt.close()
+            except:
+                pass
 
         # fig = plt.figure(figsize=figsize)
         # ax1 = fig.add_subplot(121)

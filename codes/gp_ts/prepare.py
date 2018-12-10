@@ -137,23 +137,28 @@ class Prior(object):
         assert hasattr(self, 'X_init') and hasattr(self, 'Y_init'), "need to bind initial data first, call 'gen_data_init'"
         return self.X_init, self.Y_init
             
-    def fit_GP_model(self, noise_var=None, kern=GPy.kern.RBF, verbose=False, **kw):
+    def fit_GP_model(self, noise_var=None, kern=None, verbose=False, **kw):
         """
         Fit a GP regression model using X_init, Y_init. 
         The number of optimization restarts is 10 by default. 
 
         : param noise_var: NoneType or float
                 Gaussian_noise fitting or fixed
-        : param kern: subclass of Kern in GPy.kern.src
+        : param kern: instance of Kern in GPy.kern.src
                 kernel to use
         """	
         X_grid, Y_grid = self.get_data_init()
         X, Y = transform_grid_X(X_grid, mesh=True), transform_grid_Y(Y_grid)
-        kernel = kern(input_dim=self.input_dim)
+
+        if kern is None:
+            kernel = GPy.kern.RBF(input_dim=self.input_dim)
+        else:
+            kernel = kern
         self.model = GPy.models.GPRegression(X, Y, kernel=kernel)
         if noise_var is not None:
             self.model.Gaussian_noise.constrain_fixed(noise_var, warning=False) # fix Gaussian noise variance
-        self.model.optimize_restarts(verbose=verbose, **kw) # optimize hyper parameters
+        num_restarts = kw.get('num_restarts', 10)
+        self.model.optimize_restarts(verbose=verbose, num_restarts=num_restarts) # optimize hyper parameters
         if verbose:
             print(self.model)
             print()
@@ -231,10 +236,10 @@ class Post(Prior):
 
         : param noise_var: NoneType or float
                 Gaussian_noise to be fixed
-        : param kern: NoneType or subclass of Kern in GPy.kern.src
+        : param kern: NoneType or instance of Kern in GPy.kern.src
                 kernel to use,
                 the default is self.kern (kern=None)
-        : param mean_func: NoneType or subclass of Mapping in GPy.mappings
+        : param mean_func: NoneType or instance of Mapping in GPy.mappings
                 mean function to use,
                 the default is self.mean_func (kern=None)
         : param X_init: NoneType or 2-d numpy.ndarray
@@ -390,7 +395,8 @@ class AdditivePrior(Prior):
         "Inconsistent components number"
 
         for i in range(len(self.priors)):
-            self.priors[i].fit_GP_model(noise_var=noise_var[i], kern=kern[i], \
+            kernel = kern[i](input_dim = self.priors[i].input_dim)
+            self.priors[i].fit_GP_model(noise_var=noise_var[i], kern=kernel, \
              verbose=verbose, **kw)
         
     def _combine_kernel(self, kern):

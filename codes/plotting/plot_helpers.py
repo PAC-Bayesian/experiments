@@ -4,7 +4,7 @@ from matplotlib.colors import LogNorm
 plt.switch_backend('agg')
 import seaborn as sns
 import pandas as pd
-from ..gp_ts.utils import load_and_pack, offset_woodbury
+from ..gp_ts.utils import load_and_pack, offset_woodbury, print_model
 from .stat_helpers import contrast, calculate_hist
 import scipy as sp
 from scipy import stats
@@ -132,15 +132,21 @@ def contrast_KDE_2d(data, label=None, figsize=None, bounds=None, **kw):
 def traj_plot_1d(traj, save=False, figsize=None, path_to='./', **kw):
     color = kw.get('color', 'red')
     assert traj, "empty sequence of models"
+    is_print = kw.get('is_print', False)
+    path_info = kw.get('path_info', path_to)
+
     num_data_init = traj[0].num_data
+    if is_print:
+        print_model(traj[0], path=path_info)
+
     bounds = kw.get("bounds", (0, 1))
     for k, m in enumerate(traj[1:]):
         m = m.copy()
         offset_woodbury(m, num_data_init)
         fig = GPy.plotting.plotting_library().figure(figsize=figsize)
         m.plot_f(figure=fig, plot_limits=bounds)
-        m.plot_data(which_data_rows=range(num_data_init, m.num_data-1), figure=fig)
-        m.plot_data(which_data_rows=range(m.num_data-1, m.num_data), color=color, figure=fig)
+        m.plot_data(which_data_rows=range(num_data_init, m.num_data-1), figure=fig, marker='+')
+        m.plot_data(which_data_rows=range(m.num_data-1, m.num_data), color=color, figure=fig, marker='+')
         if save:
             plt.savefig(path_to + 'm_{}'.format(k))
         plt.clf()
