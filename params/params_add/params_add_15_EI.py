@@ -35,18 +35,18 @@ d_factor = len(kw_list)
 
 kw_add_post={'kw_list': kw_list, 
              'num_comps': d_factor, 
-             'noise_var': 1e-9 * d_factor}
+             'noise_var': 1e-8}
 
 
 
 kw_samplers = {'samplers': {'SGD_EI': 'TSSGD'},
                'args': {'SGD_EI': {'num_anim': 5,
-                                   'N_new': 10 * d_factor,
+                                   'N_new': 300,
                                    'details': ["EI"], 
                                    'search_step': "EI",
                                    'search_dir': "realized_GD", 
-                                   'min_util': 5e-4 * int(np.sqrt(d_factor)), 
-                                   'tol': 0.05 * int(np.sqrt(d_factor))
+                                   'min_util': 1e-3, 
+                                   'tol': 0.1
                                   }
                                 }
               }
